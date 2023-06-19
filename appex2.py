@@ -100,7 +100,7 @@ def main():
     if user_question:
         handle_userinput(user_question)
 
- with st.sidebar:
+    with st.sidebar:
         st.subheader("Your documents")
         excel_docs = st.file_uploader(
             "Upload your Excel files here and click on 'Process'", accept_multiple_files=True)
