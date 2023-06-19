@@ -1,4 +1,4 @@
-mport streamlit as st
+import streamlit as st
 import openai
 from dotenv import load_dotenv
 import pandas as pd
