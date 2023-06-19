@@ -46,7 +46,7 @@ def get_vectorstore(text_chunks):
 
 
 class GPT35Turbo:
-    def init(self):
+    def __init__(self):
         self.model = "gpt-3.5-turbo"
         self.api_key = os.getenv("OPENAI_API_KEY")
         openai.api_key = self.api_key
@@ -59,6 +59,7 @@ class GPT35Turbo:
             temperature=0.5
         )
         return response.choices[0].text.strip()
+
 def get_conversation_chain(vectorstore):
     llm = GPT35Turbo()
 
