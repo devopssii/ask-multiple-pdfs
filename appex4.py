@@ -26,6 +26,7 @@ class GPT35Turbo:
             temperature=0.5
         )
         return response.choices[0].text.strip()
+
 def get_excel_text(excel_docs):
     text = ""
     for excel in excel_docs:
@@ -50,14 +51,13 @@ def get_vectorstore(text_chunks):
 
 def get_conversation_chain(vectorstore):
     llm = ChatOpenAI(
-        model='gpt-3.5-turbo',
-        temperature=0.7,
-        max_tokens=2000,
+        model='gpt-3.5-turbo-16k',
+        temperature=0.1,
+        max_tokens=8000,
        # messages=[{"role": "system", "content": "You are a marketer and sales analyst >
     # Add any additional model parameters if needed
     )
-    
-    memory = ConversationBufferMemory(
+memory = ConversationBufferMemory(
         memory_key='chat_history', return_messages=True)
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
@@ -79,14 +79,14 @@ def handle_userinput(user_question):
                 "{{MSG}}", message.content), unsafe_allow_html=True)
 
 def main():
-    st.set_page_config(page_title="Chat with multiple Excel files", page_icon=":books:")
+    st.set_page_config(page_title="Chat with multiple Excel files", page_icon=":books:>
     st.write(css, unsafe_allow_html=True)
 
     if "conversation" not in st.session_state:
         st.session_state.conversation = None
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = None
-    
+
     st.header("Chat with multiple Excel files :books:")
     user_question = st.text_input("Ask a question about your documents:")
     if user_question:
@@ -94,7 +94,7 @@ def main():
 
     with st.sidebar:
         st.subheader("Your documents")
-        excel_docs = st.file_uploader("Upload your Excel files here and click on 'Proce>
+        excel_docs = st.file_uploader("Upload your Excel files here and click on 'Proc>
         if st.button("Process"):
             with st.spinner("Processing"):
                 # get excel text
