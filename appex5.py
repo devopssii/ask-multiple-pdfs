@@ -34,16 +34,15 @@ def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
     return vectorstore
-
 def get_conversation_chain(vectorstore):
     llm = ChatOpenAI(
         model='gpt-3.5-turbo-16k',
-        temperature=0.1,
-        max_tokens=8000,
+        temperature=0.5,
+        max_tokens=12000,
        # messages=[{"role": "system", "content": "You are a marketer and sales analyst >
     # Add any additional model parameters if needed
     )
-    
+
     memory = ConversationBufferMemory(
         memory_key='chat_history', return_messages=True)
     conversation_chain = ConversationalRetrievalChain.from_llm(
@@ -82,7 +81,7 @@ vectorstore = get_vectorstore(text_chunks)
 conversation_chain = get_conversation_chain(vectorstore)
 
 def main():
-    st.set_page_config(page_title="Chat with multiple Excel files", page_icon=":books:>
+    st.set_page_config(page_title="Задай вопрос на тему продаж на Wildberries", page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
 
     if "conversation" not in st.session_state:
@@ -90,8 +89,8 @@ def main():
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = None
 
-    st.header("Chat with multiple Excel files :books:")
-    user_question = st.text_input("Ask a question about your documents:")
+    st.header("Задай вопрос на тему продаж на Wildberries он найдет информацию о любом товаре и расскажет :books:")
+    user_question = st.text_input("Напиши 5 моделей кроссовок с продажами от 1000:")
     if user_question:
         handle_userinput(user_question)
 
