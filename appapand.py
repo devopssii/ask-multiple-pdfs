@@ -35,7 +35,7 @@ def handle_userinput(user_question):
 
     # display response
     st.write(response)
-    st.markdown(response)
+
 def main():
     st.set_page_config(page_title="Chat with multiple Excel files", page_icon=":books:")
     st.header("Chat with multiple Excel files :books:")
