@@ -1,8 +1,13 @@
 import streamlit as st
 import pandas as pd
-from pandasai import PandasAI
-from pandasai.llm import OpenAI
 import os
+import pandas as pd
+import pandasai as pdai
+from pandasai import PandasAI
+from pandasai.llm.openai import OpenAI
+from pandasai.llm.starcoder import Starcoder
+from pandasai.llm.open_assistant import OpenAssistant
+from pandasai.llm.google_palm import GooglePalm
 
 # read excel files from directory
 excel_dir = "data/"
