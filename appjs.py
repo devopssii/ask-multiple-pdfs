@@ -10,14 +10,16 @@ from htmlTemplates import css, bot_template, user_template
 import openai
 import os
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
-def get_excel_text(excel_docs):
+def get_json_text(json_docs):
     text = ""
-    for excel in excel_docs:
-        df = pd.read_excel(excel)
-        text += df.to_string(index=False)
+    for json_file in json_docs:
+        with open(json_file, 'r') as f:
+            data = json.load(f)
+            text += json.dumps(data)
     return text
 
 def get_text_chunks(text):
@@ -65,12 +67,12 @@ def handle_userinput(user_question):
             st.write(bot_template.replace(
                 "{{MSG}}", message.content), unsafe_allow_html=True)
 
-# read excel files from directory
-excel_dir = "/home/myhome202323/ask-multiple-pdfs/data/"
-excel_files = [os.path.join(excel_dir, f) for f in os.listdir(excel_dir) if f.endswith(".xlsx")]
+# read json files from directory
+json_dir = "/home/myhome202323/ask-multiple-pdfs/data/"
+json_files = [os.path.join(json_dir, f) for f in os.listdir(json_dir) if f.endswith(".json")]
 
-# get excel text
-raw_text = get_excel_text(excel_files)
+# get json text
+raw_text = get_json_text(json_files)
 
 # get the text chunks
 text_chunks = get_text_chunks(raw_text)
