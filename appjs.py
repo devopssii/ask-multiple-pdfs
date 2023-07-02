@@ -84,7 +84,7 @@ vectorstore = get_vectorstore(text_chunks)
 conversation_chain = get_conversation_chain(vectorstore)
 
 def main():
-    st.set_page_config(page_title="Задай вопрос на тему продаж на Wildberries", page_icon=":books:")
+    st.set_page_config(page_title="Задай любой вопрос о чатах в телеграм", page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
 
     if "conversation" not in st.session_state:
@@ -92,8 +92,8 @@ def main():
     if "chat_history" not in st.session_state:
         st.session_state.chat_history = None
 
-    st.header("Задай вопрос на тему продаж на Wildberries он найдет информацию о любом товаре и расскажет :books:")
-    user_question = st.text_input("Напиши 5 моделей кроссовок с продажами от 1000:")
+    st.header("Задай любой вопрос о чатах в телеграм:")
+    user_question = st.text_input("Где самый вкусный плов в ташкенте по мнению из чата?")
     if user_question:
         handle_userinput(user_question)
 
