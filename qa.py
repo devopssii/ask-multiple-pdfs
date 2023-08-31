@@ -42,7 +42,7 @@ def get_conversation_chain(vectorstore):
         model='gpt-3.5-turbo-16k',
         temperature=0.5,
         max_tokens=12000,
-       # messages=[{"role": "system", "content": "You are a marketer and sales analyst >
+       # messages=[{"role": "system", "content": "You are a marketer and sales analyst"}]
     # Add any additional model parameters if needed
     )
 
