@@ -39,25 +39,10 @@ def get_text_chunks(text):
     chunks = text_splitter.split_text(text)
     return chunks
 
-def get_vectorstore_with_meta(files):
-    texts = []
-    meta_data = []
-    
-    for file in files:
-        raw_text = read_file(file)
-        text_chunks = get_text_chunks(raw_text)
-        
-        for chunk in text_chunks:
-            texts.append(chunk)
-            meta_data.append({
-                "file_name": file.name,
-                "start_index": chunk[1],
-                "end_index": chunk[2]
-            })
-    
+def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings()
-    vectorstore = FAISS.from_texts_with_meta(texts=texts, embedding=embeddings, meta=meta_data)
-    
+    # embeddings = HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-xl")
+    vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
     return vectorstore
 
 def get_conversation_chain(vectorstore):
