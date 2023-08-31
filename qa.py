@@ -95,23 +95,27 @@ def main():
 
     with st.sidebar:
         st.subheader("Your documents")
-        pdf_docs = st.file_uploader(
-            "Upload your PDFs here and click on 'Process'", accept_multiple_files=True)
+        uploaded_files = st.file_uploader(
+            "Upload your files here and click on 'Process'", accept_multiple_files=True, type=["pdf", "csv", "txt", "xlsx"])
         if st.button("Process"):
             with st.spinner("Processing"):
-                # get pdf text
-                raw_text = get_pdf_text(pdf_docs)
+                texts = []
+                for file in uploaded_files:
+                    raw_text = read_file(file)
+                    if raw_text:  # проверяем, что текст был успешно извлечен
+                        texts.append(raw_text)
+            
+                # объединяем все тексты
+                combined_text = "\n".join(texts)
 
                 # get the text chunks
-                text_chunks = get_text_chunks(raw_text)
+                text_chunks = get_text_chunks(combined_text)
 
                 # create vector store
                 vectorstore = get_vectorstore(text_chunks)
 
                 # create conversation chain
-                st.session_state.conversation = get_conversation_chain(
-                    vectorstore)
-
+                st.session_state.conversation = get_conversation_chain(vectorstore)
 
 if __name__ == '__main__':
     main()
