@@ -39,7 +39,6 @@ def get_text_chunks(text):
     chunks = text_splitter.split_text(text)
     return chunks
 
-
 def get_vectorstore_with_meta(files):
     texts = []
     meta_data = []
@@ -52,15 +51,12 @@ def get_vectorstore_with_meta(files):
             texts.append(chunk)
             meta_data.append({
                 "file_name": file.name,
-                # Используйте другую мета-информацию, если это необходимо
+                "start_index": chunk[1],
+                "end_index": chunk[2]
             })
     
     embeddings = OpenAIEmbeddings()
-    vectorstore = FAISS.from_texts(texts=texts, embedding=embeddings)
-    # Сохраните мета-данные в атрибуте vectorstore или в другом удобном месте
-    
-    return vectorstore
-
+    vectorstore = FAISS.from_texts_with_meta(texts=texts, embedding=embeddings, meta=meta_data)
     
     return vectorstore
 
