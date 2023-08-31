@@ -10,14 +10,23 @@ from langchain.chains import ConversationalRetrievalChain
 from htmlTemplates import css, bot_template, user_template
 from langchain.llms import HuggingFaceHub
 
-def get_pdf_text(pdf_docs):
-    text = ""
-    for pdf in pdf_docs:
-        pdf_reader = PdfReader(pdf)
-        for page in pdf_reader.pages:
+def read_file(file):
+    if file.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+        df = pd.read_excel(file)
+        return df.to_string(index=False)
+    elif file.type == "text/csv":
+        df = pd.read_csv(file)
+        return df.to_string(index=False)
+    elif file.type == "application/pdf":
+        text = ""
+        pdf = PdfReader(file)
+        for page in pdf.pages:
             text += page.extract_text()
-    return text
-
+        return text
+    elif file.type == "text/plain":
+        return file.getvalue().decode()
+    else:
+        return None
 
 def get_text_chunks(text):
     text_splitter = CharacterTextSplitter(
