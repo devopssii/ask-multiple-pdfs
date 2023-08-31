@@ -11,7 +11,6 @@ from langchain.chains import ConversationalRetrievalChain
 from htmlTemplates import css, bot_template, user_template
 from docx import Document
 
-load_dotenv()
 
 def read_file(file):
     if file.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
