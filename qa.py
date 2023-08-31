@@ -102,7 +102,7 @@ def main():
     with st.sidebar:
         st.subheader("Your documents")
         uploaded_files = st.file_uploader(
-            "Загрузите несколько документов разных форматов и нажмите 'Process'", accept_multiple_files=True, type=["pdf", "csv", "txt", "xlsx"])
+            "Загрузите несколько документов разных форматов и нажмите 'Process'", accept_multiple_files=True, type=["pdf", "csv", "txt", "xlsx", "docx"])
         if st.button("Process"):
             with st.spinner("Processing"):
                 texts = []
