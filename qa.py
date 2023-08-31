@@ -77,7 +77,7 @@ def handle_userinput(user_question):
 
 def main():
     load_dotenv()
-    st.set_page_config(page_title="Chat with multiple PDFs",
+    st.set_page_config(page_title="Чат с информацией из всех файлов сразу",
                        page_icon=":books:")
     st.write(css, unsafe_allow_html=True)
 
@@ -87,14 +87,14 @@ def main():
         st.session_state.chat_history = None
 
     st.header("Chat with multiple PDFs :books:")
-    user_question = st.text_input("Ask a question about your documents:")
+    user_question = st.text_input("Задайти вопрос ИИ по всем документам сразу что бы получить ответ по тематике из всех файлов:")
     if user_question:
         handle_userinput(user_question)
 
     with st.sidebar:
         st.subheader("Your documents")
         uploaded_files = st.file_uploader(
-            "Upload your files here and click on 'Process'", accept_multiple_files=True, type=["pdf", "csv", "txt", "xlsx"])
+            "Загрузите несколько документов разных форматов и нажмите 'Process'", accept_multiple_files=True, type=["pdf", "csv", "txt", "xlsx"])
         if st.button("Process"):
             with st.spinner("Processing"):
                 texts = []
