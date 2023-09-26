@@ -12,40 +12,6 @@ from htmlTemplates import css, bot_template, user_template
 from docx import Document
 
 
-def read_file(file):
-    if file.type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
-        df = pd.read_excel(file)
-        return df.to_string(index=False)
-    elif file.type == "text/csv":
-        df = pd.read_csv(file)
-        return df.to_string(index=False)
-    elif file.type == "application/pdf":
-        text = ""
-        pdf = PdfReader(file)
-        for page in pdf.pages:
-            text += page.extract_text()
-        return text
-    elif file.type == "text/plain":
-        return file.getvalue().decode()
-    elif file.type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-        doc = Document(file)
-        fullText = []
-        for para in doc.paragraphs:
-            fullText.append(para.text)
-        return '\n'.join(fullText)
-    else:
-        return None
-
-def get_text_chunks(text):
-    text_splitter = CharacterTextSplitter(
-        separator="\n",
-        chunk_size=1000,
-        chunk_overlap=200,
-        length_function=len
-    )
-    chunks = text_splitter.split_text(text)
-    return chunks
-
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings()
     vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
