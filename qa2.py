@@ -4,13 +4,16 @@ from PyPDF2 import PdfReader
 import pandas as pd
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import OpenAIEmbeddings
-from langchain.vectorstores import FAISS
+from langchain.vectorstores import Chroma
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from htmlTemplates import css, bot_template, user_template
 from docx import Document
+from typing import List, Tuple, Dict
+import chromadb
 
+client = chromadb.PersistentClient(path="/db")
 
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings()
@@ -35,8 +38,25 @@ def get_conversation_chain(vectorstore):
     )
     return conversation_chain
 
+def get_relevant_documents_and_metadata(query: str, vectorstore) -> Tuple[List[str], List[Dict]]:
+    """Get relevant documents and their metadata from Chroma db using query."""
+    results = vectorstore.query(query_texts=query, include=["metadatas", "documents"])
+    
+    # Extract documents and metadatas from results
+    documents = [doc['document'] for doc in results['documents']]
+    metadatas = [meta['metadata'] for meta in results['metadatas']]
+    
+    return documents, metadatas
 
 def handle_userinput(user_question):
+    # Get relevant documents and their metadata
+    documents, metadatas = get_relevant_documents_and_metadata(user_question, st.session_state.vectorstore)
+    
+    # Here, you can format the documents and metadatas as needed and send them to the chat as a system message
+    system_message = format_documents_and_metadata(documents, metadatas)
+    st.write(system_message)
+    
+    # Continue with your existing chatbot logic
     response = st.session_state.conversation({'question': user_question})
     st.session_state.chat_history = response['chat_history']
 
