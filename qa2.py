@@ -14,6 +14,7 @@ from typing import List, Tuple, Dict
 import chromadb
 
 client = chromadb.PersistentClient(path="/db")
+collection = client.get_collection("samolet")
 
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings()
