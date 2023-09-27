@@ -48,9 +48,13 @@ def get_text_chunks(text):
 
 def get_vectorstore(text_chunks):
     embeddings = OpenAIEmbeddings()
-    vectorstore = FAISS.from_texts(texts=text_chunks, embedding=embeddings)
-    return vectorstore
+    vectorestore = Chroma.from_texts(texts=text_chunks, embedding=embeddings, persist_directory="./data", collection_name="samolet2")
+    return vectorestore
 
+def get_chroma(vectorstore)
+    chromadb = Chroma(persist_directory="./data", embedding_function=embedding_minilm)
+    documents_with_metadata = chromadb.get(include=["metadatas", "documents"])
+    return
 def get_conversation_chain(vectorstore):
     llm = ChatOpenAI(
         model='gpt-3.5-turbo-16k',
