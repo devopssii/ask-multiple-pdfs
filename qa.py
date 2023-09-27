@@ -51,11 +51,13 @@ def get_vectorstore(text_chunks):
     vectorestore = Chroma.from_texts(texts=text_chunks, embedding=embeddings, persist_directory="./data", collection_name="samolet2")
     return vectorestore
 
-def get_chroma(vectorstore)
+def get_chromadb(vectorstore)
     chromadb = Chroma(persist_directory="./data", embedding_function=embedding_minilm)
-    documents_with_metadata = chromadb.get(include=["metadatas", "documents"])
-    return
-def get_conversation_chain(vectorstore):
+    documents_with_metadata = chromadb.get(include=["embeddings","metadatas", "documents"])
+    return chromadb
+    
+def get_conversation_chain(chromadb):
+    vectordb = chromadb.get(include=["embeddings","metadatas", "documents"])
     llm = ChatOpenAI(
         model='gpt-3.5-turbo-16k',
         temperature=0.5,
@@ -68,7 +70,7 @@ def get_conversation_chain(vectorstore):
         memory_key='chat_history', return_messages=True)
     conversation_chain = ConversationalRetrievalChain.from_llm(
         llm=llm,
-        retriever=vectorstore.as_retriever(),
+        retriever=vectordb.as_retriever(),
         memory=memory,
     )
     return conversation_chain
@@ -124,8 +126,10 @@ def main():
                 # create vector store
                 vectorstore = get_vectorstore(text_chunks)
 
+                chromadb = get_chromadb(vectorstore)
+
                 # create conversation chain
-                st.session_state.conversation = get_conversation_chain(vectorstore)
+                st.session_state.conversation = get_conversation_chain(chromadb)
 
 if __name__ == '__main__':
     main()
